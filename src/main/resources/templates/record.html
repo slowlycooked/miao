@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/header :: header('日志')">
+
+</head>
+<body>
+
+<a href="/" class="btn btn-primary btn-lg btn-block" role="button">返回</a>
+
+<form action="/html/tags/html_form_tag_action.cfm">
+    <div class="form-group">
+        <label for="date">日期</label>
+        <input type="text" class="form-control" id="date" name="date">
+    </div>
+    <div class="form-group">
+        <label for="type">类型</label>
+        <input type="text" class="form-control" id="type" name="type">
+    </div>
+    <div class="form-group">
+        <label for="amount">数值</label>
+        <input type="text" class="form-control" id="amount" name="type">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>
+</body>
+<div th:replace="fragments/footer :: foot"></div>
+
+</html>

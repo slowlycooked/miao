@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" >
+<head th:replace="fragments/header :: header('日志')">
+
+</head>
+<body>
+
+
+<div id="root">
+
+    <a href="/record/" class="btn btn-primary btn-lg btn-block" role="button">添加记录</a>
+        <h1 class="">记录明细</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>时间</th>
+                <th>类型</th>
+                <th>数值</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr v-for="record in records">
+                    <td>{{frontEndDateFormat(record.created)}}</td>
+                    <td>{{record.type}}</td>
+                    <td>{{record.amount}}</td>
+                    <td><a :href="getDelLink(record)">删除</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+</div>
+
+</body>
+<div th:replace="fragments/footer :: foot"></div>
+
+<script>
+    // bootstrap the demo
+
+
+    var app = new Vue({
+        el: '#root',
+        data: {
+            records: []
+        },
+        mounted(){
+            this.fetchRecords();
+        },
+        methods: {
+            fetchRecords(){
+                axios.get("/api/records").then(function (response) {
+                    this.records = response.data;
+                }.bind(this));
+            },
+            frontEndDateFormat(date) {
+                return moment(date).format('MM-DD HH:mm:ss');
+            },
+            getDelLink(record){
+                return '/api/records/del/' + record.id;
+            }
+        }
+
+    });
+
+
+</script>
+</html>
