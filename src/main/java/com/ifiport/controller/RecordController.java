@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class RecordController {
     @RequestMapping(path="/record", method= RequestMethod.GET)
     public String goHome(){
-        return "record";
+        return "";
     }
 
 }

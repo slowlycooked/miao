@@ -1,33 +1,50 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" >
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml" lang="en">
 <head th:replace="fragments/header :: header('日志')">
-
 </head>
 <body>
 
 
-<div id="root">
+<div class="container" id="root">
+    <div id="no-more-tables">
+    <table  class="table table-responsive table-striped table-hover table-condensed table-bordered ">
+        <thead>
+        <tr>
+            <th>时间</th>
+            <th>类型</th>
+            <th>数值</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td data-title="时间">
+                <input  v-model="date" placeholder="输入时间" id="date"/>
+            </td>
+            <td data-title="类型">
+                <input  v-model="type" placeholder="选择类型" id="type"/>
+            </td>
+            <td data-title="数量">
+                <input  v-model="amount" placeholder="数量" id="amount"/>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" v-on:click="saveRecord">添加</button>
+            </td>
+        </tr>
+        <tr v-for="record in records">
+            <td data-title="时间">{{frontEndDateFormat(record.created)}}</td>
+            <td data-title="类型">{{record.type}}</td>
+            <td data-title="数量">{{record.amount}}</td>
+            <td>
+                <button type="button" class="btn btn-default" v-on:click="deleteRecord(record.id)">删除</button>
 
-    <a href="/record/" class="btn btn-primary btn-lg btn-block" role="button">添加记录</a>
-        <h1 class="">记录明细</h1>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>时间</th>
-                <th>类型</th>
-                <th>数值</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr v-for="record in records">
-                    <td>{{frontEndDateFormat(record.created)}}</td>
-                    <td>{{record.type}}</td>
-                    <td>{{record.amount}}</td>
-                    <td><a :href="getDelLink(record)">删除</a></td>
-                </tr>
-            </tbody>
-        </table>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+    </div>
+
 
 </div>
 
@@ -35,13 +52,16 @@
 <div th:replace="fragments/footer :: foot"></div>
 
 <script>
-    // bootstrap the demo
-
+    //Initialize as global component
+    Vue.component('date-picker', VueBootstrapDatetimePicker.default);
 
     var app = new Vue({
         el: '#root',
         data: {
-            records: []
+            records: [],
+            date: null, type: '', amount: 0, datePicker:null,
+            popupVisible: false,
+            alertSuccess: false
         },
         mounted(){
             this.fetchRecords();
@@ -57,6 +77,34 @@
             },
             getDelLink(record){
                 return '/api/records/del/' + record.id;
+            },
+            saveRecord(){
+                axios({
+                    method: 'post',
+                    url: '/api/records',
+                    data: {date: this.date, type: this.type, amount: this.amount}
+                }).then(function (response) {
+                    this.alertSuccess = true;
+                    this.fetchRecords();
+                    setTimeout(() => {
+                        this.alertSuccess = false;
+                    }, 2000);
+                }.bind(this));
+            },
+            deleteRecord(id){
+                axios({
+                    method: 'get',
+                    url: '/api/records/del/'+id
+                }).then(function (response) {
+                    if(response.data == "deleted") {
+                        this.popupVisible = true;
+                        this.fetchRecords();
+                        setTimeout(() => {
+                            this.popupVisible = false;
+                        }, 1000);
+                    }
+
+                }.bind(this));
             }
         }
 

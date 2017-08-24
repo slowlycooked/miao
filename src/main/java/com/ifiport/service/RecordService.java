@@ -6,13 +6,22 @@ package com.ifiport.service;
 
 import com.ifiport.model.Record;
 import com.ifiport.model.User;
+import com.ifiport.pojo.RecordSum;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
 import java.util.List;
 
 public interface RecordService {
 
-    public List<Record> getAllRecords();
-    public Record getRecordById(long id);
+    List<Record> getAllRecords();
+
+    List<Record> getAllRecordsOrderByDate();
+
+    List<Record> getRecordsByDate(@DateTimeFormat(pattern = "yyyy-MM-dd HH:MM:ss") Date date1,
+                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:MM:ss") Date date2);
+
+    Record getRecordById(long id);
 
 
     void insert(Record newRecord);
@@ -21,4 +30,7 @@ public interface RecordService {
     List<Record> findByUser(User user);
 
     void deleteById(long id);
+
+    List<RecordSum> getRecordsSummaryByDate(@DateTimeFormat(pattern = "yyyy-MM-dd HH:MM:ss") Date date1,
+                                            @DateTimeFormat(pattern = "yyyy-MM-dd HH:MM:ss") Date date2);
 }

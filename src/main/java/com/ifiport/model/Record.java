@@ -5,25 +5,26 @@ package com.ifiport.model;
  */
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
+@Table(name = "record")
 public class Record {
 
     @Id
     @GeneratedValue
-    @Column(name="id")
     private long id;
-
-    @Column(name="type")
     private String type;
-    @Column(name="amount")
-    private int amount;
-
+    private float amount;
     @ManyToOne
     private User creator;
-
+    private Date created;
+    private Date updated;
+   // @Column(name="record_date1")
+    private Date recordDate1;
+  //  @Column(name="record_date2")
+    private Date recordDate2;
+    private String notes;
 
     public Record() {
         super();
@@ -45,17 +46,13 @@ public class Record {
         this.type = type;
     }
 
-    public int getAmount() {
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
-
-
-    private Date created;
-    private Date updated;
 
     @PrePersist
     protected void onCreate() {
@@ -74,11 +71,11 @@ public class Record {
         return updated;
     }
 
-
-    public Record(String type, int amount) {
+    public Record(String type, float amount, Date datetime) {
         super();
         this.type = type;
         this.amount = amount;
+        this.recordDate1 = datetime;
 
     }
 
@@ -90,4 +87,27 @@ public class Record {
     public User getCreator() {
         return creator;
     }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Date getRecordDate1() {
+        return recordDate1;
+    }
+
+    public void setRecordDate1(Date recordDate) {
+        this.recordDate1 = recordDate;
+    }
+
+    public Date getRecordDate2() { return recordDate2; }
+
+    public void setRecordDate2(Date recordDate2) {
+        this.recordDate2 = recordDate2;
+    }
+
 }

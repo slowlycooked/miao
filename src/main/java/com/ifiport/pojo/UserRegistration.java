@@ -1,4 +1,4 @@
-package pojo;
+package com.ifiport.pojo;
 
 /**
  * Created by Martin on 2017/08/14.
